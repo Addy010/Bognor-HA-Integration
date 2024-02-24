@@ -1,0 +1,6 @@
+{
+  "domain": "bognor-data",
+  "name": "Bognor Data",
+  "requirements": ["bs4==0.0.2", "requests==2.31.0"],
+  "version": "0.0.1"
+}
