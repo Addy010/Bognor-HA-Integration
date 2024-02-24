@@ -1,12 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from homeassistant.components import logger
 import logging
 import functools
 
 
-logger = logger.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 def filter_tide_data(data):
     filtered_data = []
@@ -109,6 +108,8 @@ def get_tide_data():
     sunriseTime = response.text[sunriseLoc + 15:sunriseLoc + 20]
     sunsetTime = response.text[sunsetLoc + 15:sunsetLoc + 20]
 
+    logger.error(f"Sunrise: {sunriseTime}, Sunset: {sunsetTime}")
+
     return {
         "times": times,
         "currentHeight": height,
@@ -117,4 +118,5 @@ def get_tide_data():
     }
 
 async def async_get_tide_data(hass):
+    logger.error("async_get_tide_data called")
     return await hass.async_add_executor_job(get_tide_data)
