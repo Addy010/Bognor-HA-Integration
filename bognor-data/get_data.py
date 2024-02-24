@@ -1,11 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from homeassistant.components import logger
 import logging
 import functools
 
 
-logger = logging.getLogger(__name__)
+logger = logger.getLogger(__name__)
 
 def filter_tide_data(data):
     filtered_data = []
@@ -67,7 +68,7 @@ def filter_tide_data(data):
     else:
         next_low_tide = next_low_tide[1]
 
-    logger.info(f"Next high tide: {next_high_tide}, Next low tide: {next_low_tide}")
+    logger.error(f"Next high tide: {next_high_tide}, Next low tide: {next_low_tide}")
 
     return {
         "next_high_tide": next_high_tide,
