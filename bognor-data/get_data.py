@@ -38,10 +38,35 @@ def filter_tide_data(data):
         perc = (data['currentHeight'] - nextTide[2]) / (prevTide[2] - nextTide[2])
         perc = round(perc * 100, 2)
 
+    next_high_tide = None
+    next_low_tide = None
+    for i in filtered_data:
+        if i[0] == "Low":
+            if next_low_tide is None:
+                next_low_tide = i
+            else:
+                if datetime.strptime(i[1], '%H:%M').time() < datetime.strptime(next_low_tide[1], '%H:%M').time():
+                    next_low_tide = i
+        else:
+            if next_high_tide is None:
+                next_high_tide = i
+            else:
+                if datetime.strptime(i[1], '%H:%M').time() < datetime.strptime(next_high_tide[1], '%H:%M').time():
+                    next_high_tide = i
+
+    if next_high_tide is None:
+        next_high_tide = "Tomorrow"
+    else:
+        next_high_tide = next_high_tide[1]
+    if next_low_tide is None:
+        next_low_tide = "Tomorrow"
+    else:
+        next_low_tide = next_low_tide[1]
+
     return {
-        "times": filtered_data,
-        "currentHeight": data['currentHeight'],
-        "heightPercentage": perc,
+        "next_high_tide": next_high_tide,
+        "next_low_tide": next_low_tide,
+        "current_tide_percentage": perc,
         "sunrise": data['sunrise'],
         "sunset": data['sunset']
     }
@@ -83,3 +108,5 @@ def get_tide_data():
         "sunrise": sunriseTime,
         "sunset": sunsetTime
     }
+
+print(filter_tide_data(get_tide_data()))
