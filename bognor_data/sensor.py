@@ -2,9 +2,11 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.event import async_track_time_interval
 from datetime import timedelta
 from .get_data import async_get_tide_data, get_tide_data, filter_tide_data
-
+import logging
 
 # SENSOR_ID = "bognor_tide_sensor"
+
+logger = logging.getLogger(__name__)
 
 class HighTideSensor(Entity):
     def __init__(self, data):
@@ -172,6 +174,7 @@ class SunsetSensor(Entity):
 async def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""
     # Fetch the data
+    logger.error("SETUP PLATFORM RUN")
     tide_data = await async_get_tide_data(hass)
     filtered_data = filter_tide_data(tide_data)
 
