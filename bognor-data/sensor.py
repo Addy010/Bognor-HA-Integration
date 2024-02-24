@@ -1,7 +1,7 @@
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.event import async_track_time_interval
 from datetime import timedelta
-from get_data import get_tide_data, filter_tide_data
+from .get_data import get_tide_data, filter_tide_data
 
 
 # SENSOR_ID = "bognor_tide_sensor"

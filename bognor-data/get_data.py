@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+import functools
 
 
 def filter_tide_data(data):
@@ -109,4 +110,5 @@ def get_tide_data():
         "sunset": sunsetTime
     }
 
-print(filter_tide_data(get_tide_data()))
+async def async_get_tide_data(hass):
+    return await hass.async_add_executor_job(get_tide_data)

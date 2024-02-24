@@ -1,4 +1,4 @@
-from homeassistant.helpers.entity import EntityPlatform
+from homeassistant.helpers.entity_platform import EntityPlatform
 from .sensor import HighTideSensor, LowTideSensor, TidePercentageSensor, SunriseSensor, SunsetSensor
 from .get_data import get_tide_data, filter_tide_data
 
