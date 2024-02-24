@@ -1,7 +1,7 @@
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.event import async_track_time_interval
 from datetime import timedelta
-from .get_data import get_tide_data, filter_tide_data
+from .get_data import async_get_tide_data, get_tide_data, filter_tide_data
 
 
 # SENSOR_ID = "bognor_tide_sensor"
@@ -34,7 +34,7 @@ class HighTideSensor(Entity):
         )
 
     async def async_update(self, time):
-        tide_data = get_tide_data()
+        tide_data = await async_get_tide_data(self.hass)
         filtered_data = filter_tide_data(tide_data)
         self._state = filtered_data["next_high_tide"]
 
@@ -67,7 +67,7 @@ class LowTideSensor(Entity):
         )
 
     async def async_update(self, time):
-        tide_data = get_tide_data()
+        tide_data = await async_get_tide_data(self.hass)
         filtered_data = filter_tide_data(tide_data)
         self._state = filtered_data["next_low_tide"]
 
@@ -100,7 +100,7 @@ class TidePercentageSensor(Entity):
         )
 
     async def async_update(self, time):
-        tide_data = get_tide_data()
+        tide_data = await async_get_tide_data(self.hass)
         filtered_data = filter_tide_data(tide_data)
         self._state = filtered_data["current_tide_percentage"]
 
@@ -133,7 +133,7 @@ class SunriseSensor(Entity):
         )
 
     async def async_update(self, time):
-        tide_data = get_tide_data()
+        tide_data = await async_get_tide_data(self.hass)
         filtered_data = filter_tide_data(tide_data)
         self._state = filtered_data["sunrise"]
 
@@ -165,6 +165,28 @@ class SunsetSensor(Entity):
         )
 
     async def async_update(self, time):
-        tide_data = get_tide_data()
+        tide_data = await async_get_tide_data(self.hass)
         filtered_data = filter_tide_data(tide_data)
         self._state = filtered_data["sunset"]
+
+def setup_platform(hass, config, add_entities, discovery_info=None):
+    """Set up the sensor platform."""
+    # Fetch the data
+    tide_data = get_tide_data()
+    filtered_data = filter_tide_data(tide_data)
+
+    # Create the sensors
+    high_tide_sensor = HighTideSensor(filtered_data)
+    low_tide_sensor = LowTideSensor(filtered_data)
+    tide_percentage_sensor = TidePercentageSensor(filtered_data)
+    sunrise_sensor = SunriseSensor(filtered_data)
+    sunset_sensor = SunsetSensor(filtered_data)
+
+    # Add the sensors to Home Assistant
+    add_entities([
+        high_tide_sensor,
+        low_tide_sensor,
+        tide_percentage_sensor,
+        sunrise_sensor,
+        sunset_sensor
+    ])
