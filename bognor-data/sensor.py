@@ -169,10 +169,10 @@ class SunsetSensor(Entity):
         filtered_data = filter_tide_data(tide_data)
         self._state = filtered_data["sunset"]
 
-def setup_platform(hass, config, add_entities, discovery_info=None):
+async def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""
     # Fetch the data
-    tide_data = get_tide_data()
+    tide_data = await async_get_tide_data(hass)
     filtered_data = filter_tide_data(tide_data)
 
     # Create the sensors
