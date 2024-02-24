@@ -9,5 +9,6 @@ def setup(hass, config):
     # Fetch the data
     logger.error("TEST RUNNING")
     hass.helpers.discovery.load_platform('sensor', 'bognor_data', {}, config)
+    logger.error("TEST RUNNING COMPLETE")
 
     return True
